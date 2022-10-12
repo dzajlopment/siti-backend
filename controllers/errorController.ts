@@ -1,4 +1,5 @@
 import AppError from "../utils/AppError";
+import ErrorStack from "../models/errorModel";
 
 const saveError = async err => {
     const newError = await ErrorStack.create({
@@ -30,7 +31,6 @@ const handleValidationErrorDB = err => {
 };
 
 const sendErrorDev = async (err, req, res) => {
-    // A) API
     if (req.originalUrl.startsWith('/api')) {
         return res.status(err.statusCode).json({
             status: err.status,
@@ -39,20 +39,10 @@ const sendErrorDev = async (err, req, res) => {
             stack: err.stack
         });
     }
-
-    // B) RENDERED WEBSITE
-    console.error('ERROR 💥', err);
-    const errorId = await saveError(err);
-    return res.status(err.statusCode).render('error', {
-        title: 'Something went wrong!',
-        msg: `${err.message} (${errorId})`
-    });
 };
 
 const sendErrorProd = async (err, req, res) => {
-    // A) API
     if (req.originalUrl.startsWith('/api')) {
-        // A) Operational, trusted error: send message to client
         if (err.isOperational) {
             const errorId = await saveError(err);
             return res.status(err.statusCode).json({
@@ -86,3 +76,5 @@ const errorController = (err, req, res, next) => {
         sendErrorProd(error, req, res);
     }
 }
+
+export default errorController;

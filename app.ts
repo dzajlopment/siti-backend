@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
 import AppError from "./utils/AppError";
+import globalErrorHandler from "./controllers/errorController";
 
 const app = express()
 
