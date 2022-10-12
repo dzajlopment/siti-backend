@@ -7,7 +7,7 @@ type queryString = {
 
 class APIFeatures {
     query: any;
-    queryString: queryString;
+    private queryString: queryString;
 
     constructor(query, queryString) {
         this.query = query;
@@ -61,4 +61,4 @@ class APIFeatures {
     }
 }
 
-module.exports = APIFeatures;
+export default APIFeatures;
