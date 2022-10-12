@@ -5,6 +5,7 @@ import morgan from "morgan"
 import rateLimit from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
+import AppError from "./utils/AppError";
 
 const app = express()
 
@@ -36,9 +37,9 @@ app.use(compression());
 app.use("/", () => { });
 
 app.all("*", (req, res, next) => {
-    // custom error
+    new AppError(`Can't find ${req.originalUrl} on this server!`, 404);
 })
 
-// catch app errors
+app.use(globalErrorHandler)
 
 export default app;
