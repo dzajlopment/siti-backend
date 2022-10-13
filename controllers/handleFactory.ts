@@ -76,3 +76,20 @@ export const deleteOne = (Model: Model<any>, req: Request, res: Response, next: 
     }))(req, res, next)
 
 }
+
+export const patchOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
+    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
+
+        const id = req.params.id;
+        const { title, lat, lng, image, description } = req.query
+        const doc = await Model.findOneAndUpdate({ _id: id }, { title, lat, lng, image, description }, { upsert: true })
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                data: doc[0],
+            }
+        })
+
+    }))(req, res, next)
+}

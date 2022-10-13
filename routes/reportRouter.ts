@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllReports, getReport, createReport, deleteReport } from "../controllers/reportController";
+import { getAllReports, getReport, createReport, deleteReport, patchReport } from "../controllers/reportController";
 
 const router = express.Router();
 
@@ -10,6 +10,6 @@ router.route("/")
 router.route("/:id")
     .get(getReport)
     .delete(deleteReport)
-
+    .patch(patchReport)
 
 export default router;
