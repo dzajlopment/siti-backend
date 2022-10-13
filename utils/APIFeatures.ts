@@ -9,13 +9,13 @@ class APIFeatures {
     query: any;
     private queryString: queryString;
 
-    constructor(query, queryString) {
+    constructor(query: any, queryString: queryString) {
         this.query = query;
         this.queryString = queryString;
     }
 
     filter() {
-        const queryObj = { ...this.queryString };
+        const queryObj: any = { ...this.queryString };
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
         excludedFields.forEach(el => delete queryObj[el]);
 

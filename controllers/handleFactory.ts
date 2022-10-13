@@ -1,14 +1,17 @@
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 import APIFeatures from "../utils/APIFeatures"
-export const getAll = Model => {
-    catchAsync(async (req, res, next) => {
+import type { Model } from "mongoose";
+import type { Response, Request, NextFunction } from "express"
+
+export const getAll = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
+    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
         let filter = {};
         if (req.params.reportId) {
             filter = { report: req.params.reportId };
         }
 
-        const features = new APIFeatures(Model.find(filter), req.query);
+        const features = new APIFeatures(Model.find(filter), req.query as any);
 
         const doc = await features.query;
 
@@ -19,6 +22,4 @@ export const getAll = Model => {
                 data: doc
             }
         })
-
-    })
-}
+    }))(req, res, next)
