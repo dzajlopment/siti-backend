@@ -8,7 +8,7 @@ router.route("/")
     .post(createReport)
 
 router.route("/:id")
-    .get((req, res) => { console.log(req.params.id); res.status(200).json({ data: req.params.id }) })
+    .get(getReport)
     .delete(() => { console.log("bruh") })
 
 
