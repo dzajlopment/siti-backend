@@ -61,3 +61,18 @@ export const getOne = (Model: Model<any>, req: Request, res: Response, next: Nex
 
     }))(req, res, next)
 }
+
+export const deleteOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
+    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
+
+        const id = req.params.id;
+        await Model.findByIdAndRemove(id);
+
+        res.status(204).json({
+            status: "success",
+            data: null
+        })
+
+    }))(req, res, next)
+
+}

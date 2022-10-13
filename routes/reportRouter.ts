@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllReports, getReport, createReport } from "../controllers/reportController";
+import { getAllReports, getReport, createReport, deleteReport } from "../controllers/reportController";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.route("/")
 
 router.route("/:id")
     .get(getReport)
-    .delete(() => { console.log("bruh") })
+    .delete(deleteReport)
 
 
 export default router;
