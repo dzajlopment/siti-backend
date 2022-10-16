@@ -19,8 +19,12 @@ const reportSchema = new mongoose.Schema({
         default: new Date()
     },
     image: {
-        data: Buffer,
-        contentType: String
+        type: String,
+        required: true
+    },
+    severity: {
+        type: String,
+        required: true
     },
     description: String,
 });
