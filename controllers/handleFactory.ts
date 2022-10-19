@@ -1,5 +1,4 @@
 import catchAsync from "../utils/catchAsync";
-import AppError from "../utils/AppError";
 import APIFeatures from "../utils/APIFeatures"
 import type { Model } from "mongoose";
 import type { Response, Request, NextFunction } from "express"
@@ -27,12 +26,10 @@ export const getAll = (Model: Model<any>, req: Request, res: Response, next: Nex
 export const createOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
 
-        const { title, description, lat, lng, date, image } = req.query
 
         const doc = await Model.insertMany([
-            { title, description, lat, lng, date, image }
+            req.query
         ])
-
         res.status(201).json({
             status: "success",
             data: {
@@ -81,8 +78,8 @@ export const patchOne = (Model: Model<any>, req: Request, res: Response, next: N
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
 
         const id = req.params.id;
-        const { title, lat, lng, image, description } = req.query
-        const doc = await Model.findOneAndUpdate({ _id: id }, { title, lat, lng, image, description }, { upsert: true })
+
+        const doc = await Model.findOneAndUpdate({ _id: id }, req.query, { upsert: true })
 
         res.status(200).json({
             status: 'success',

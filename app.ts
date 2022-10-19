@@ -8,7 +8,9 @@ import compression from "compression";
 import AppError from "./utils/AppError";
 import globalErrorHandler from "./controllers/errorController";
 import reportRouter from "./routes/reportRouter";
+import ideaRouter from "./routes/ideaRouter"
 import type { Response, Request, NextFunction } from "express";
+
 const app = express()
 
 app.enable("trust proxy");
@@ -36,10 +38,12 @@ app.use(compression());
 
 // ROUTES
 
-app.use("/api/v1/reports", reportRouter)
+app.use("/api/v1/reports", reportRouter);
+app.use("/api/v1/ideas", ideaRouter);
+
 app.use("/", (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
-        data: "HEHEHEHAW"
+        data: "Working"
     })
     next();
 });
