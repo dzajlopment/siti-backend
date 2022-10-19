@@ -5,6 +5,7 @@ import type { Response, Request, NextFunction } from "express"
 
 export const getAll = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
+
         let filter = {};
         if (req.params.reportId) {
             filter = { report: req.params.reportId };
@@ -25,11 +26,12 @@ export const getAll = (Model: Model<any>, req: Request, res: Response, next: Nex
 
 export const createOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
-
-
+        console.log(req.query, req.params, req.body)
         const doc = await Model.insertMany([
-            req.query
+            req.body
         ])
+        console.log(doc);
+
         res.status(201).json({
             status: "success",
             data: {

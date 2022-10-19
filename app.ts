@@ -9,7 +9,7 @@ import AppError from "./utils/AppError";
 import globalErrorHandler from "./controllers/errorController";
 import reportRouter from "./routes/reportRouter";
 import ideaRouter from "./routes/ideaRouter"
-import type { Response, Request, NextFunction } from "express";
+import { Response, Request, NextFunction, json } from "express";
 
 const app = express()
 
@@ -35,6 +35,9 @@ app.use("/api", limiter);
 app.use(mongoSanitize());
 
 app.use(compression());
+
+app.use(json())
+
 
 // ROUTES
 

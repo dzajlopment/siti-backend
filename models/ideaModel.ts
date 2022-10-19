@@ -26,13 +26,10 @@ const IdeaSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    location: Location || String,
+    location: Location || String, // lat=10&lon=10 {lat: 10, lon: 10}
     cost: Number,
     status: IdeaStatus,
     voting: IdeaVoting
 });
 
 export const IdeaModel = mongoose.model("Idea", IdeaSchema);
-export const LocationSchema = mongoose.model("Location", Location);
-export const IdeaVotingSchema = mongoose.model("Voting", IdeaVoting);
-export const IdeaStatusSchema = mongoose.model("Status", IdeaStatus);
