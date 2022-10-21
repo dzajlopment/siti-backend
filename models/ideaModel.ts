@@ -11,8 +11,8 @@ const IdeaVoting = new mongoose.Schema({
 })
 
 const IdeaStatus = new mongoose.Schema({
-    Approved: Boolean,
-    Rejected: Boolean
+    approved: Boolean,
+    rejected: Boolean
 })
 
 const IdeaSchema = new mongoose.Schema({
@@ -26,7 +26,11 @@ const IdeaSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    location: Location || String, // lat=10&lon=10 {lat: 10, lon: 10}
+    location: {
+        lat: Number,
+        lng: Number,
+        adress: String,
+    },
     cost: Number,
     status: IdeaStatus,
     voting: IdeaVoting
