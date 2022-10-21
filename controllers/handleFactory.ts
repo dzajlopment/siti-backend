@@ -2,6 +2,7 @@ import catchAsync from "../utils/catchAsync";
 import APIFeatures from "../utils/APIFeatures";
 import type { Model } from "mongoose";
 import type { Response, Request, NextFunction } from "express";
+import { cloudinaryConfig, uploader } from "../cloudinaryConfig";
 
 export const getAll = (
 	Model: Model<any>,
@@ -94,6 +95,15 @@ export const createOne = (
 ) => {
 	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 		const { file } = req;
+
+		cloudinaryConfig;
+
+		await uploader
+			.upload(file.path)
+			.then((result) => {
+				console.log(result.secure_url);
+			})
+			.catch((err) => console.log(err));
 
 		// console.log(req.query, req.body, req.params);
 		// if (req.body.image !== undefined) {

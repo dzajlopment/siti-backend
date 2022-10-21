@@ -10,13 +10,10 @@ import multer from "multer";
 import AppError from "../utils/AppError";
 
 const multerStorage = multer.diskStorage({
-	destination(req, file, callback) {
-		callback(null, "img");
-	},
 	filename(req, file, callback) {
 		const ext = file.mimetype.split("/")[1];
 		const filename = file.originalname;
-		callback(null, `report-${filename}.${ext}`);
+		callback(null, `report-${filename}-${Date.now()}.${ext}`);
 	},
 });
 
