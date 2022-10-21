@@ -98,35 +98,19 @@ export const createOne = (
 
 		cloudinaryConfig;
 
-		await uploader
+		const uploadRes = await uploader
 			.upload(file.path)
-			.then((result) => {
-				console.log(result.secure_url);
-			})
 			.catch((err) => console.log(err));
 
-		// console.log(req.query, req.body, req.params);
-		// if (req.body.image !== undefined) {
-		// 	req.body.image = req.body.image.replace("file:///", "");
-		// 	await cloudinary.v2.uploader
-		// 		.upload(req.body.image, {
-		// 			resource_type: "image",
-		// 		})
-		// 		.then((result) => {
-		// 			req.body.image = result.secure_url;
-		// 		})
-		// 		.catch((err) => {
-		// 			console.log("Error", JSON.stringify(err, null, 2));
-		// 			return;
-		// 		});
-		// 	const doc = await Model.insertMany([req.body]);
+		const data = { ...req.body, image: (uploadRes as any).secure_url };
 
-		// 	res.status(201).json({
-		// 		status: "success",
-		// 		data: {
-		// 			data: doc,
-		// 		},
-		// 	});
-		// }
+		const doc = await Model.insertMany([data]);
+
+		res.status(201).json({
+			status: "success",
+			data: {
+				data: doc,
+			},
+		});
 	})(req, res, next);
 };
