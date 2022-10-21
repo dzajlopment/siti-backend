@@ -2,17 +2,6 @@ import catchAsync from "../utils/catchAsync";
 import APIFeatures from "../utils/APIFeatures";
 import type { Model } from "mongoose";
 import type { Response, Request, NextFunction } from "express";
-import cloudinary from "cloudinary";
-import dotenv from "dotenv";
-
-dotenv.config({});
-
-cloudinary.v2.config({
-	cloud_name: process.env.CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
-	secure: true,
-});
 
 export const getAll = (
 	Model: Model<any>,
