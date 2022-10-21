@@ -104,27 +104,30 @@ export const createOne = (
 	next: NextFunction
 ) => {
 	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-		if (req.body.image !== undefined) {
-			req.body.image = req.body.image.replace("file:///", "");
-			await cloudinary.v2.uploader
-				.upload(req.body.image, {
-					resource_type: "image",
-				})
-				.then((result) => {
-					req.body.image = result.secure_url;
-				})
-				.catch((err) => {
-					console.log("Error", JSON.stringify(err, null, 2));
-					return;
-				});
-			const doc = await Model.insertMany([req.body]);
+		const { file } = req;
 
-			res.status(201).json({
-				status: "success",
-				data: {
-					data: doc,
-				},
-			});
-		}
+		// console.log(req.query, req.body, req.params);
+		// if (req.body.image !== undefined) {
+		// 	req.body.image = req.body.image.replace("file:///", "");
+		// 	await cloudinary.v2.uploader
+		// 		.upload(req.body.image, {
+		// 			resource_type: "image",
+		// 		})
+		// 		.then((result) => {
+		// 			req.body.image = result.secure_url;
+		// 		})
+		// 		.catch((err) => {
+		// 			console.log("Error", JSON.stringify(err, null, 2));
+		// 			return;
+		// 		});
+		// 	const doc = await Model.insertMany([req.body]);
+
+		// 	res.status(201).json({
+		// 		status: "success",
+		// 		data: {
+		// 			data: doc,
+		// 		},
+		// 	});
+		// }
 	})(req, res, next);
 };
