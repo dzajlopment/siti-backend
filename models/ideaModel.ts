@@ -26,7 +26,7 @@ const IdeaSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    location: Location || String, // lat=10&lon=10 {lat: 10, lon: 10}
+    location: Location || String,
     cost: Number,
     status: IdeaStatus,
     voting: IdeaVoting

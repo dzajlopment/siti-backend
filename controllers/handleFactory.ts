@@ -38,6 +38,9 @@ export const getAll = (Model: Model<any>, req: Request, res: Response, next: Nex
 export const createOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
         if (req.body.image !== null) {
+            if (req.body.image.startsWith("file:///")) {
+                req.body.image = req.body.image.substring(8);
+            }
             await cloudinary.v2.uploader.upload(req.body.image, {
                 resource_type: "image",
             }).then(result => {
