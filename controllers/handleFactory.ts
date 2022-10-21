@@ -2,6 +2,17 @@ import catchAsync from "../utils/catchAsync";
 import APIFeatures from "../utils/APIFeatures"
 import type { Model } from "mongoose";
 import type { Response, Request, NextFunction } from "express"
+import cloudinary from "cloudinary"
+import dotenv from "dotenv"
+
+dotenv.config({});
+
+cloudinary.v2.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true,
+})
 
 export const getAll = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
@@ -24,9 +35,20 @@ export const getAll = (Model: Model<any>, req: Request, res: Response, next: Nex
         })
     }))(req, res, next)
 
-export const createOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
+export const createOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.query, req.params, req.body)
+        if (req.body.image !== null) {
+            await cloudinary.v2.uploader.upload(req.body.image, {
+                resource_type: "image",
+            }).then(result => {
+                req.body.image = result.secure_url;
+                console.log(req.body.image);
+            }).catch((err) => {
+                console.log("Error", JSON.stringify(err, null, 2));
+                return;
+            });
+        }
+        // console.log(req.body)
         const doc = await Model.insertMany([
             req.body
         ])
@@ -40,6 +62,7 @@ export const createOne = (Model: Model<any>, req: Request, res: Response, next: 
         })
 
     }))(req, res, next)
+}
 
 export const getOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
