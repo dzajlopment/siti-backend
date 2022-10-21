@@ -21,8 +21,6 @@
     },
     "main": "server.ts",
     "scripts": {
-        "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-        "prestart": "npm run build",
         "start": "ts-node server.ts",
         "dev": "nodemon server.ts",
         "start:prod": "NODE_ENV=production nodemon server.ts"

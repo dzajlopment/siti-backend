@@ -1,94 +1,108 @@
 import catchAsync from "../utils/catchAsync";
-import APIFeatures from "../utils/APIFeatures"
+import APIFeatures from "../utils/APIFeatures";
 import type { Model } from "mongoose";
-import type { Response, Request, NextFunction } from "express"
+import type { Response, Request, NextFunction } from "express";
 
-export const getAll = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
-    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
+export const getAll = (
+	Model: Model<any>,
+	req: Request,
+	res: Response,
+	next: NextFunction
+) =>
+	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+		let filter = {};
+		if (req.params.reportId) {
+			filter = { report: req.params.reportId };
+		}
 
-        let filter = {};
-        if (req.params.reportId) {
-            filter = { report: req.params.reportId };
-        }
+		const features = new APIFeatures(Model.find(filter), req.query as any);
 
-        const features = new APIFeatures(Model.find(filter), req.query as any);
+		const doc = await features.query;
 
-        const doc = await features.query;
+		res.status(200).json({
+			status: "success",
+			results: doc.length,
+			data: doc,
+		});
+	})(req, res, next);
 
-        res.status(200).json({
-            status: "success",
-            results: doc.length,
-            data: {
-                data: doc
-            }
-        })
-    }))(req, res, next)
+export const createOne = (
+	Model: Model<any>,
+	req: Request,
+	res: Response,
+	next: NextFunction
+) =>
+	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+		console.log(req.query, req.params, req.body);
+		const doc = await Model.insertMany([req.body]);
+		console.log(doc);
 
-export const createOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) =>
-    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.query, req.params, req.body)
-        const doc = await Model.insertMany([
-            req.body
-        ])
-        console.log(doc);
+		res.status(201).json({
+			status: "success",
+			data: {
+				data: doc,
+			},
+		});
+	})(req, res, next);
 
-        res.status(201).json({
-            status: "success",
-            data: {
-                data: doc
-            }
-        })
+export const getOne = (
+	Model: Model<any>,
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+		const id = req.params.id;
 
-    }))(req, res, next)
+		const features = new APIFeatures(Model.find({ _id: id }), req.query as any);
 
-export const getOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
-    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
+		const doc = await features.query;
 
-        const id = req.params.id;
+		res.status(200).json({
+			status: "success",
+			results: doc.length,
+			data: {
+				data: doc[0],
+			},
+		});
+	})(req, res, next);
+};
 
-        const features = new APIFeatures(Model.find({ _id: id }), req.query as any);
+export const deleteOne = (
+	Model: Model<any>,
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+		const id = req.params.id;
+		await Model.findByIdAndRemove(id);
 
-        const doc = await features.query;
+		res.status(204).json({
+			status: "success",
+			data: null,
+		});
+	})(req, res, next);
+};
 
-        res.status(200).json({
-            status: "success",
-            results: doc.length,
-            data: {
-                data: doc[0]
-            }
-        })
+export const patchOne = (
+	Model: Model<any>,
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+		const id = req.params.id;
 
-    }))(req, res, next)
-}
+		const doc = await Model.findOneAndUpdate({ _id: id }, req.query, {
+			upsert: true,
+		});
 
-export const deleteOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
-    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
-
-        const id = req.params.id;
-        await Model.findByIdAndRemove(id);
-
-        res.status(204).json({
-            status: "success",
-            data: null
-        })
-
-    }))(req, res, next)
-
-}
-
-export const patchOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
-    catchAsync((async (req: Request, res: Response, next: NextFunction) => {
-
-        const id = req.params.id;
-
-        const doc = await Model.findOneAndUpdate({ _id: id }, req.query, { upsert: true })
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                data: doc[0],
-            }
-        })
-
-    }))(req, res, next)
-}
+		res.status(200).json({
+			status: "success",
+			data: {
+				data: doc[0],
+			},
+		});
+	})(req, res, next);
+};
