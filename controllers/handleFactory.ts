@@ -37,25 +37,25 @@ export const getAll = (Model: Model<any>, req: Request, res: Response, next: Nex
 
 export const createOne = (Model: Model<any>, req: Request, res: Response, next: NextFunction) => {
     catchAsync((async (req: Request, res: Response, next: NextFunction) => {
-        if (req.body.image !== null) {
+
+        if (req.body.image !== undefined) {
             if (req.body.image.startsWith("file:///")) {
                 req.body.image = req.body.image.substring(8);
             }
+
             await cloudinary.v2.uploader.upload(req.body.image, {
                 resource_type: "image",
             }).then(result => {
                 req.body.image = result.secure_url;
-                console.log(req.body.image);
             }).catch((err) => {
                 console.log("Error", JSON.stringify(err, null, 2));
                 return;
             });
         }
-        // console.log(req.body)
+
         const doc = await Model.insertMany([
             req.body
         ])
-        console.log(doc);
 
         res.status(201).json({
             status: "success",
