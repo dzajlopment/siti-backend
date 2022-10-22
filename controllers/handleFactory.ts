@@ -105,8 +105,7 @@ export const createOne = (
 				.catch((err) => console.log(err));
 		}
 
-		let data: any;
-		uploadRes !== undefined ? data = { ...req.body, image: (uploadRes as any).secure_url } : data = { ...req.body }
+		let data: any = uploadRes !== undefined ? { ...req.body, image: (uploadRes as any).secure_url } : { ...req.body }
 
 		const doc = await Model.insertMany([data]);
 
