@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const Location = new mongoose.Schema({
     lat: Number,
-    lng: Number
+    lng: Number,
+    adress: String
 })
 
 const IdeaVoting = new mongoose.Schema({
@@ -20,20 +21,32 @@ const IdeaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    description: String,
-    justification: String,
+    description: {
+        type: String,
+        required: true
+    },
+    justification: {
+        type: String,
+        required: true
+    },
     created: {
         type: Date,
         default: new Date()
     },
     location: {
-        lat: Number,
-        lng: Number,
-        adress: String,
+        type: Location,
+        required: true
     },
     cost: Number,
     status: IdeaStatus,
-    voting: IdeaVoting
+    voting: {
+        type: IdeaVoting,
+        default: {
+            liked: false,
+            score: 0,
+        },
+        required: true,
+    }
 });
 
 export const IdeaModel = mongoose.model("Idea", IdeaSchema);

@@ -96,9 +96,9 @@ export const createOne = (
 	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
 		let uploadRes: any;
-
-		if (req.body.image !== undefined) {
-			const file = req.body.image.replace("file:///", "");
+		const imagePath = req.body.image
+		if (imagePath) {
+			const file = imagePath.replace("file:///", "");
 			cloudinaryConfig;
 			uploadRes = await uploader
 				.upload(file)
