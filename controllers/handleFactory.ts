@@ -94,18 +94,18 @@ export const createOne = (
 	next: NextFunction
 ) => {
 	catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-
 		let uploadRes: any;
-		const imagePath = req.body.image
+		const imagePath = req.file.path;
 		if (imagePath) {
 			const file = imagePath.replace("file:///", "");
 			cloudinaryConfig;
-			uploadRes = await uploader
-				.upload(file)
-				.catch((err) => console.log(err));
+			uploadRes = await uploader.upload(file).catch((err) => console.log(err));
 		}
 
-		let data: any = uploadRes !== undefined ? { ...req.body, image: (uploadRes as any).secure_url } : { ...req.body }
+		let data: any =
+			uploadRes !== undefined
+				? { ...req.body, image: (uploadRes as any).secure_url }
+				: { ...req.body };
 
 		const doc = await Model.insertMany([data]);
 
